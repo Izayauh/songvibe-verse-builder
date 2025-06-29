@@ -9,16 +9,227 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      prediction_models: {
+        Row: {
+          accuracy: number | null
+          created_at: string
+          created_by: string
+          id: string
+          is_active: boolean | null
+          model_config: Json | null
+          model_type: string
+          name: string
+          version: string
+        }
+        Insert: {
+          accuracy?: number | null
+          created_at?: string
+          created_by: string
+          id?: string
+          is_active?: boolean | null
+          model_config?: Json | null
+          model_type: string
+          name: string
+          version: string
+        }
+        Update: {
+          accuracy?: number | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_active?: boolean | null
+          model_config?: Json | null
+          model_type?: string
+          name?: string
+          version?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          assigned_at: string
+          assigned_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_features: {
+        Row: {
+          extracted_at: string
+          feature_name: string
+          feature_type: string
+          feature_value: Json
+          id: string
+          video_id: string
+        }
+        Insert: {
+          extracted_at?: string
+          feature_name: string
+          feature_type: string
+          feature_value: Json
+          id?: string
+          video_id: string
+        }
+        Update: {
+          extracted_at?: string
+          feature_name?: string
+          feature_type?: string
+          feature_value?: Json
+          id?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_features_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_stats: {
+        Row: {
+          comments: number | null
+          engagement_rate: number | null
+          id: string
+          likes: number | null
+          prediction_confidence: number | null
+          recorded_at: string
+          shares: number | null
+          video_id: string
+          views: number | null
+          viral_score: number | null
+        }
+        Insert: {
+          comments?: number | null
+          engagement_rate?: number | null
+          id?: string
+          likes?: number | null
+          prediction_confidence?: number | null
+          recorded_at?: string
+          shares?: number | null
+          video_id: string
+          views?: number | null
+          viral_score?: number | null
+        }
+        Update: {
+          comments?: number | null
+          engagement_rate?: number | null
+          id?: string
+          likes?: number | null
+          prediction_confidence?: number | null
+          recorded_at?: string
+          shares?: number | null
+          video_id?: string
+          views?: number | null
+          viral_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_stats_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      videos: {
+        Row: {
+          analyzed_at: string
+          analyzed_by: string
+          created_at: string
+          id: string
+          is_public: boolean | null
+          platform: string
+          title: string
+          upload_date: string | null
+          url: string
+        }
+        Insert: {
+          analyzed_at?: string
+          analyzed_by: string
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          platform: string
+          title: string
+          upload_date?: string | null
+          url: string
+        }
+        Update: {
+          analyzed_at?: string
+          analyzed_by?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          platform?: string
+          title?: string
+          upload_date?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          user_id: string
+          required_role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "analyst" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +344,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "analyst", "viewer"],
+    },
   },
 } as const
